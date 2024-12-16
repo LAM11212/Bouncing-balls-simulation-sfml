@@ -56,15 +56,25 @@ public:
 				this->velocityY[i] += gravity * deltaTime;
 			}
 
+			this->circles[i].move(0.0f, this->velocityY[i] * deltaTime);
+
+			float bottomcircle = this->circles[i].getPosition().y + this->circles[i].getRadius() * 2;
+			//TODO FIX THIS FUNCTION. Bounces for a while and then randomly teleports to the bottom of screen
+			if (bottomcircle >= 600.0f)
+			{
+				this->velocityY[i] = -this->velocityY[i] - (deltaTime * 2);
+			}
+
 			for (int j = 0; j < this->circles.size(); j++)
 			{
 				if (i != j)
 				{
+					//actually using the distance formula for once in my academic life, incredible
 					sf::Vector2f posA = this->circles[i].getPosition();
 					sf::Vector2f posB = this->circles[j].getPosition();
 					float radA = this->circles[i].getRadius();
 					float radB = this->circles[j].getRadius();
-
+					//calculate distance and then add and take the sqrt
 					float distX = posA.x - posB.x;
 					float distY = posA.y - posB.y;
 					float dist = sqrt(distX * distX + distY * distY);
@@ -73,34 +83,17 @@ public:
 					{
 						float movecirc = (radA + radB) - dist;
 						sf::Vector2f moveDir(distX / dist, distY / dist);
-						this->circles[i].move(moveDir.x * movecirc * 0.2f, moveDir.y * movecirc * 0.2f);
-						this->circles[j].move(-moveDir.x * movecirc * 0.2f, -moveDir.y * movecirc * 0.2f);
+						this->circles[i].move(moveDir.x * movecirc * 0.5f, moveDir.y * movecirc * 0.5f);
+						this->circles[j].move(-moveDir.x * movecirc * 0.5f, -moveDir.y * movecirc * 0.5f);
 
-						//BOUNCE PHYSICS
-						this->velocityX[i] = -this->velocityX[i];
-						this->velocityX[j] = -this->velocityX[j];
-						this->velocityY[i] = -this->velocityY[i];
-						this->velocityY[j] = -this->velocityY[j];
+						//BOUNCE PHYSICS (revised)
+						std::swap(this->velocityY[i], this->velocityY[j]);
+						std::swap(this->velocityX[i], this->velocityX[j]);
 
 					}
-				}
-			}
-
-
-			for (int i = 0; i < this->circles.size(); i++)
-			{
-				float circleBottom = this->circles[i].getPosition().y + this->circles[i].getRadius() * 2;
-				this->circles[i].move(0.0f, this->velocityY[i] * deltaTime);
-
-				if (circleBottom >= 600.0f)
-				{
-					this->circles[i].setPosition(this->circles[i].getPosition().x, 600.0f - this->circles[i].getRadius() * 2);
-					this->velocityY[i] = 0.0f;
-					this->onGround[i] = true;
 				}
 			}
 		}
 		
 	}
 };
-

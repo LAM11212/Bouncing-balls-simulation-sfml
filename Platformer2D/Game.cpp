@@ -35,10 +35,9 @@ void Game::initCircle()
 		circle.setRadius(distr(gen));
 		//TODO: make a function to randomly assign colors to the circles
 		circle.setFillColor(sf::Color::Blue);
-		circle.setPosition(sf::Mouse::getPosition(*this->window).x, sf::Mouse::getPosition(*this->window).y);
+		circle.setPosition(sf::Mouse::getPosition(*this->window).x - circle.getRadius(), sf::Mouse::getPosition(*this->window).y - circle.getRadius());
 		this->circles.push_back(circle);
 		this->velocityY.push_back(0.0f);
-		//TODO fix velocity x so that it decays over time and bounce slows overtime
 		this->velocityX.push_back(0.0f);
 		this->onGround.push_back(false);
 	}
