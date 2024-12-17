@@ -33,8 +33,9 @@ void Game::initCircle()
 	{
 		sf::CircleShape circle;
 		circle.setRadius(distr(gen));
-		//TODO: make a function to randomly assign colors to the circles
-		circle.setFillColor(sf::Color::Blue);
+		//assign random colors function call
+		sf::Color randColor = this->pickColor();
+		circle.setFillColor(randColor);
 		circle.setPosition(sf::Mouse::getPosition(*this->window).x - circle.getRadius(), sf::Mouse::getPosition(*this->window).y - circle.getRadius());
 		this->circles.push_back(circle);
 		this->velocityY.push_back(0.0f);

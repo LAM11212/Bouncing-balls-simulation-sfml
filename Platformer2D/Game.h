@@ -2,7 +2,9 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include <math.h>
+#include <random>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
@@ -44,9 +46,7 @@ public:
 	void update();
 	void render();
 
-	//circle functions
 	//this function takes values sent from initCircle(); and applies the gravity and velocity values to make them fall to the bottom
-	//TODO: add bounching physics
 	void updateCircle(float deltaTime)
 	{
 		for (int i = 0; i < this->circles.size(); i++)
@@ -59,10 +59,9 @@ public:
 			this->circles[i].move(0.0f, this->velocityY[i] * deltaTime);
 
 			float bottomcircle = this->circles[i].getPosition().y + this->circles[i].getRadius() * 2;
-			//TODO FIX THIS FUNCTION. Bounces for a while and then randomly teleports to the bottom of screen
 			if (bottomcircle >= 600.0f)
 			{
-				this->velocityY[i] = -this->velocityY[i] - (deltaTime * 2);
+				this->velocityY[i] = -this->velocityY[i] - deltaTime; 
 			}
 
 			for (int j = 0; j < this->circles.size(); j++)
@@ -95,5 +94,18 @@ public:
 			}
 		}
 		
+	}
+	//picks color randomly and returns that color to function call in game.cpp
+	sf::Color pickColor()
+	{
+		std::random_device rd;
+
+		std::mt19937 gen(rd());
+
+		std::uniform_int_distribution<> distr(0, 6);
+
+		std::vector<sf::Color> colors = { sf::Color::Blue , sf::Color::Red, sf::Color::Cyan, sf::Color::Green, sf::Color::Magenta, sf::Color::White, sf::Color::Yellow};
+
+		return colors[distr(gen)];
 	}
 };
